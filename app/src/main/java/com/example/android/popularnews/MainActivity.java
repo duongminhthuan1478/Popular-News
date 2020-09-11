@@ -1,80 +1,124 @@
 package com.example.android.popularnews;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.widget.Toast;
 
-import com.example.android.popularnews.Adapter.ArticleAdapter;
 
-import com.example.android.popularnews.Interface.IListItemClickListener;
-import com.example.android.popularnews.Utils.ConstantAPI;
-import com.example.android.popularnews.Utils.Utils;
-import com.example.android.popularnews.api.ApiClient;
-import com.example.android.popularnews.api.ApiInterface;
-import com.example.android.popularnews.models.Article;
-import com.example.android.popularnews.models.News;
+import com.example.android.popularnews.Fragment.HomeFragment;
+import com.example.android.popularnews.Fragment.NotificationFragment;
+import com.example.android.popularnews.Fragment.SettingFragment;
+import com.example.android.popularnews.Fragment.UserFragment;
+import com.example.android.popularnews.Fragment.VideoFragment;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements IListItemClickListener{
+public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView mArticleRecyclerView;
-    private List<Article> articles = new ArrayList();
-    private ArticleAdapter articleAdapter;
-    private String TAG = MainActivity.class.getSimpleName();
+    final int HOME = 0;
+    final int VIDEO = 1;
+    final int NOTIFICATION = 2;
+    final int USER = 3;
+    final int SETTING = 4;
+
+    //
+    int currentPagerFragment = 0;
+    Fragment homeFragment = null, videoFragment = null, notificationFragment = null, userFragment = null, settingFragment = null;
+    private boolean doubleBackToExitPressedOnce = false;
+    //
+    // view
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mArticleRecyclerView = (RecyclerView)  findViewById(R.id.article_recyclerView);
-        mArticleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mArticleRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mArticleRecyclerView.setNestedScrollingEnabled(false);
-        mArticleRecyclerView.setHasFixedSize(true);
-        loadJsonData();
+        setupUI();
 
     }
 
 
-    public void loadJsonData() {
-        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        String country = Utils.getCountry();
-
-        Call<News> call = apiInterface.getNews(country, ConstantAPI.API_KEY);
-        call.enqueue(new Callback<News>() {
+    void setupUI() {
+        //fragment
+        homeFragment = new HomeFragment();
+        videoFragment = new VideoFragment();
+        notificationFragment = new NotificationFragment();
+        userFragment = new UserFragment();
+        settingFragment = new SettingFragment();
+        //tablayout
+        tabLayout = findViewById(R.id.home_tab_layout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onResponse(Call<News> call, Response<News> response) {
-                 if(response.isSuccessful() && response.body().getArticles() != null) {
-                     articles.clear();
-                     articles = response.body().getArticles();
-                     articleAdapter = new ArticleAdapter(articles, MainActivity.this,MainActivity.this);
-                     mArticleRecyclerView.setAdapter(articleAdapter);
-                     articleAdapter.notifyDataSetChanged();
-                 }  else {
-                     Toast.makeText(MainActivity.this, "No Response", Toast.LENGTH_LONG).show();
-                 }
+            public void onTabSelected(TabLayout.Tab tab) {
+                selectTab(tab.getPosition());
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
+
+        // defaur
+        selectTab(currentPagerFragment);
+    }
+
+    void selectTab(int tab) {
+        currentPagerFragment = tab;
+        switch (currentPagerFragment) {
+            case HOME:
+                homeFragment = new HomeFragment();
+                loadFragment(homeFragment);
+                break;
+            case VIDEO:
+                loadFragment(videoFragment);
+                break;
+            case NOTIFICATION:
+                loadFragment(notificationFragment);
+                break;
+            case USER:
+                loadFragment(userFragment);
+                break;
+            case SETTING:
+                loadFragment(settingFragment);
+                break;
+        }
+    }
+
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.home_frame_container, fragment);
+        transaction.commit();
     }
 
     @Override
-    public void onListItemClick(int clickedItemIndex) {
-        String toastMessage = "Item #" + clickedItemIndex + " clicked.";
-        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Nhấn Back thêm 1 lần nữa để thoát", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
+
 }
