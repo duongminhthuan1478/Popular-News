@@ -12,144 +12,72 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/news_item_card_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="11dp"
-        android:layout_marginRight="11dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginBottom="7dp"
-        app:cardElevation="@dimen/cardview_default_elevation"
-        app:cardCornerRadius="10dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/news_item_card_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            >
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            app:cardElevation="@dimen/cardview_default_elevation"
+            app:cardCornerRadius="10dp">
 
-            <ImageView
-                android:id="@+id/img"
-                android:transitionName="img"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                tools:ignore="UnusedAttribute"/>
-
-            <ImageView
-                android:id="@+id/shadow_bottom"
-                android:src="@drawable/bottom_shadow"
-                android:layout_alignBottom="@id/img"
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <ProgressBar
-                android:id="@+id/progress_load_photo"
-                android:layout_marginTop="70dp"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@android:style/Widget.ProgressBar.Small"/>
-
-            <TextView
-                android:id="@+id/author"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:drawablePadding="10px"
-                android:ellipsize="end"
-                android:text="Author"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:gravity="bottom"
-                android:textColor="@android:color/white"
-                android:layout_alignLeft="@+id/title"
-                android:layout_alignStart="@+id/title"
-                android:layout_alignRight="@+id/layoutDate"
-                android:layout_alignTop="@+id/layoutDate"
-                android:layout_alignEnd="@+id/layoutDate" />
-
-            <FrameLayout
-                android:id="@+id/layoutDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/img"
-                android:background="@drawable/round_white"
-                android:padding="5px"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="-50dp">
+                >
 
                 <ImageView
-                    android:src="@drawable/ic_date"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"/>
+                    android:id="@+id/notify_img"
+                    android:transitionName="img"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:scaleType="centerCrop"
+                    tools:ignore="UnusedAttribute"/>
+
+                <ImageView
+                    android:id="@+id/notify_shadow_bottom"
+                    android:src="@drawable/bottom_shadow"
+                    android:layout_alignBottom="@id/notify_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <ProgressBar
+                    android:id="@+id/progress_load_photo"
+                    android:layout_marginTop="70dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@android:style/Widget.ProgressBar.Small"/>
+
+
                 <TextView
-                    android:id="@+id/publishedAt"
+                    android:id="@+id/notify_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textStyle="bold"
+                    android:text="Title"
+                    android:textColor="@color/colorTextTitle"
+                    android:layout_toRightOf="@id/notify_img"
+                    android:textSize="16sp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp" />
+
+                <TextView
+                    android:id="@+id/notify_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#606060"
-                    android:layout_marginLeft="27dp"
-                    android:layout_marginRight="10dp"
-                    android:text="01 January 1990"/>
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:textStyle="bold"
-                android:text="Title"
-                android:textColor="@color/colorTextTitle"
-                android:layout_below="@id/img"
-                android:textSize="17sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_below="@id/title"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="5dp"
-                android:text="DESCRIPTION"/>
-
-            <TextView
-                android:id="@+id/source"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_below="@id/description"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="16dp"
-                android:fontFamily="sans-serif-light"
-                android:textStyle="bold"
-                android:textColor="@color/colorTextTitle"
-                android:maxLines="1"
-                android:text="Source"
-                android:singleLine="true"
-                android:drawablePadding="10dp"
-                android:ellipsize="end"/>
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_below="@id/description"
-                android:layout_marginTop="10dp"
-                android:text="Time"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:drawablePadding="10dp"
-                android:layout_marginBottom="10dp"
-                android:paddingLeft="5dp"
-                android:layout_toRightOf="@id/source"/>
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+                    android:layout_toRightOf="@id/notify_img"
+                    android:layout_below="@id/notify_title"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="2"
+                    android:text="DESCRIPTION"/>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 </FrameLayout>
