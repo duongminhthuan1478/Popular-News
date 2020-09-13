@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.example.android.popularnews.MainActivity;
 import com.example.android.popularnews.R;
 
 /**
@@ -24,15 +27,22 @@ import com.example.android.popularnews.R;
  * status bar and navigation/system bar) with user interaction.
  */
 public class VideoFragment extends Fragment {
-
-
+    Context context;
+    private MainActivity myContext;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+            try {
+                context = getActivity();
+            }
+            catch (NullPointerException e) {
+            }
         return inflater.inflate(R.layout.fragment_video, container, false);
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

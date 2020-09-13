@@ -85,8 +85,13 @@ public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdap
         mArticleRecyclerView.setAdapter(articleAdapter);
         articleAdapter.notifyDataSetChanged();
         Loading = view.findViewById(R.id.loading_text_view);
+    }
+
+    @Override
+    public void onResume() {
         getData();
         loadJsonData();
+        super.onResume();
     }
 
     void getData() {
