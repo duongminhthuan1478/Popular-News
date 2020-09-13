@@ -1,6 +1,7 @@
 package com.example.android.popularnews.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.example.android.popularnews.MainActivity;
 import com.example.android.popularnews.R;
 import com.example.android.popularnews.Utils.ApiCall;
 import com.example.android.popularnews.Utils.ConstantAPI;
+import com.example.android.popularnews.Utils.DetailArticleActivity;
 import com.example.android.popularnews.Utils.GetJsonAPI;
 import com.example.android.popularnews.Utils.Utils;
 
@@ -117,10 +119,10 @@ public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdap
                             XMLDOMParser parser = new XMLDOMParser();
                             for (int i = 0; i < nList.getLength(); i++) {
                                 Element element = (Element) nList.item(i);
-                                String title = parser.getValue(element, "title");
+                                String title = element.getElementsByTagName("title").item(0).getTextContent();
                                 String description = element.getElementsByTagName("description").item(0).getTextContent();
-                                String url = parser.getValue(element, "link");
-                                String publishedAt = parser.getValue(element, "pubDate");
+                                String url = element.getElementsByTagName("link").item(0).getTextContent();
+                                String publishedAt = element.getElementsByTagName("pubDate").item(0).getTextContent();
                                 articles.add(new Article("VN EXPRESS", title, description, url, publishedAt));
                             }
                             articleAdapter.notifyDataSetChanged();
@@ -139,7 +141,16 @@ public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdap
 
 
     @Override
-    public void onArticleBind(final ArticleViewHolder holder, List<Article> Articles, int position) {
+    public void onArticleBind(final ArticleViewHolder holder, final List<Article> Articles, final int position) {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newsUrl = Articles.get(position).getUrl();
+                Intent intent = new Intent(getActivity(), DetailArticleActivity.class);
+                intent.putExtra("urlDetail", newsUrl);
+                startActivity(intent);
+            }
+        });
         Article model = articles.get(position);
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());
