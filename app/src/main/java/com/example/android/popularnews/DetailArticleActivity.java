@@ -1,4 +1,4 @@
-package com.example.android.popularnews.Utils;
+package com.example.android.popularnews;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;

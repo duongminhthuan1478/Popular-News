@@ -2,7 +2,6 @@ package com.example.android.popularnews.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -32,15 +30,12 @@ import com.example.android.popularnews.Adapter.Holder.ArticleViewHolder;
 import com.example.android.popularnews.MainActivity;
 import com.example.android.popularnews.R;
 import com.example.android.popularnews.Utils.ApiCall;
-import com.example.android.popularnews.Utils.ConstantAPI;
-import com.example.android.popularnews.Utils.DetailArticleActivity;
+import com.example.android.popularnews.DetailArticleActivity;
 import com.example.android.popularnews.Utils.GetJsonAPI;
 import com.example.android.popularnews.Utils.Utils;
 
 import com.example.android.popularnews.Utils.XMLDOMParser;
 import com.example.android.popularnews.models.Article;
-import com.example.android.popularnews.models.News;
-import com.google.gson.Gson;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,7 +48,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdapterInterface {
     Context context;
