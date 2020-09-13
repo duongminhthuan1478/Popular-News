@@ -25,6 +25,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -37,10 +39,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     //Network
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.2.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     //Times Formater
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+
 
 }
