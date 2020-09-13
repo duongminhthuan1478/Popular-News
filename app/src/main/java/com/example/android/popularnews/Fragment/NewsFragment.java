@@ -118,7 +118,7 @@ public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdap
                             for (int i = 0; i < nList.getLength(); i++) {
                                 Element element = (Element) nList.item(i);
                                 String title = parser.getValue(element, "title");
-                                String description = element.getElementsByTagName("description").item(0).getTextContent();
+                                String description = element.getElementsByTagName("media:content").item(0).getAttributes().getNamedItem("url").getNodeValue();
                                 String url = parser.getValue(element, "link");
                                 String publishedAt = parser.getValue(element, "pubDate");
                                 articles.add(new Article("VN EXPRESS", title, description, url, publishedAt));
@@ -168,7 +168,7 @@ public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdap
         holder.title.setText(model.getTitle());
         holder.description.setText(model.getDescription());
         holder.source.setText(model.getSource());
-        holder.time.setText(model.getPublishedAt());
+        holder.time.setText(Utils.DateFormat(model.getPublishedAt()));
         holder.author.setText("");
         holder.published.setText( model.getPublishedAt());
     }

@@ -4,7 +4,7 @@ import com.example.android.popularnews.models.Categories;
 
 public class ConstantAPI {
     public static final Categories BASE_CATEGORIES[] = {
-            new Categories("https://vnexpress.net/rss/tin-moi-nhat.rss","Tin Mới"),
+            new Categories("https://vietnamnet.vn/rss/thoi-su-chinh-tri.rss","Tin Mới"),
             new Categories("https://vnexpress.net/rss/the-gioi.rss","Thế Giới"),
             new Categories("https://vnexpress.net/rss/thoi-su.rss","Thời Sự"),
             new Categories("https://vnexpress.net/rss/kinh-doanh.rss","Kinh Doanh"),

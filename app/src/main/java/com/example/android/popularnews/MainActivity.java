@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(homeFragment);
                 break;
             case VIDEO:
+                videoFragment = new VideoFragment();
                 loadFragment(videoFragment);
                 break;
             case NOTIFICATION:

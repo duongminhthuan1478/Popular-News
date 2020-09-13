@@ -36,7 +36,7 @@ public class Utils {
     public static String DateToTimeFormat(String oldstringDate) {
         String isTime = null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("E, d M yyyy HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
             Date d = sdf.parse(oldstringDate.substring(0, oldstringDate.length()-5));
 
             return  ""+ android.text.format.DateFormat.format(" hh:mm:ss a dd-MM-yyyy ", d);
@@ -56,7 +56,7 @@ public class Utils {
     }
 
     public static String DateFormat(String Timeinput) {
-        SimpleDateFormat sdf = new SimpleDateFormat("E, d M yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
         Date currentTime = Calendar.getInstance().getTime();
         long now = currentTime.getTime();
         long input = now;
