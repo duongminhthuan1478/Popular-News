@@ -43,4 +43,7 @@ dependencies {
 
     //Times Formater
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    implementation 'org.jsoup:jsoup:1.13.1'
+
+
 }
