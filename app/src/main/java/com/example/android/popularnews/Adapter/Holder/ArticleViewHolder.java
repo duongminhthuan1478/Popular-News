@@ -2,7 +2,6 @@ package com.example.android.popularnews.Adapter.Holder;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -20,13 +19,13 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
     public ArticleViewHolder(View itemView) {
         super(itemView);
-        title = itemView.findViewById(R.id.title);
+        title = itemView.findViewById(R.id.notify_title);
         description = itemView.findViewById(R.id.description);
         author = itemView.findViewById(R.id.author);
         published = itemView.findViewById(R.id.publishedAt);
         source = itemView.findViewById(R.id.source);
         time = itemView.findViewById(R.id.time);
-        imgView = itemView.findViewById(R.id.img);
+        imgView = itemView.findViewById(R.id.notify_img);
         progressBar = itemView.findViewById(R.id.progress_load_photo);
         cardView = itemView.findViewById(R.id.news_item_card_view);
     }
