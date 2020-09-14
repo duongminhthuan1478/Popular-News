@@ -20,12 +20,16 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -51,6 +55,7 @@ import com.example.android.popularnews.VideoActivity;
 import com.example.android.popularnews.models.Article;
 import com.google.android.material.tabs.TabLayout;
 
+import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -62,12 +67,13 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class VideoFragment extends Fragment implements VideoAdapter.VideoAdapterInterface  {
+public class VideoFragment extends Fragment implements VideoAdapter.VideoAdapterInterface {
     Context context;
     String url = "https://baotintuc.vn/video.rss";
     TextView Loading;
@@ -87,8 +93,8 @@ public class VideoFragment extends Fragment implements VideoAdapter.VideoAdapter
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof MainActivity){
-            this.context=(MainActivity) context;
+        if (context instanceof MainActivity) {
+            this.context = (MainActivity) context;
         }
     }
 
@@ -138,7 +144,7 @@ public class VideoFragment extends Fragment implements VideoAdapter.VideoAdapter
                                 String description = element.getElementsByTagName("description").item(0).getTextContent();
                                 String url = element.getElementsByTagName("link").item(0).getTextContent();
                                 String publishedAt = element.getElementsByTagName("pubDate").item(0).getTextContent();
-                                articles.add(new Article("VN EXPRESS", title, description, url, publishedAt));
+                                articles.add(new Article("Báo tin tức", title, description, url, publishedAt, "", ""));
                             }
                             articleAdapter.notifyDataSetChanged();
                             Loading.setVisibility(View.INVISIBLE);
@@ -156,19 +162,60 @@ public class VideoFragment extends Fragment implements VideoAdapter.VideoAdapter
 
 
     @Override
-    public void onArticleBind(final VideoViewHolder holder, List<Article> Articles, int position) {
+    public void onArticleBind(final VideoViewHolder holder, List<Article> Articles, final int position) {
         final Article model = articles.get(position);
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());
         requestOptions.error(Utils.getRandomDrawbleColor());
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
         requestOptions.centerCrop();
+        holder.playpause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.videoView.isPlaying()) {
+                    holder.videoView.pause();
+                    holder.playpause.setImageDrawable(getResources().getDrawable(R.drawable.play));
+                } else {
+                    holder.playpause.setImageDrawable(getResources().getDrawable(R.drawable.pause));
+                    holder.videoView.start();
+                }
+
+            }
+        });
+        holder.fulls.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (articles.get(position).getVideoUrl().length() != 0) {
+                    Intent intent = new Intent(context, VideoActivity.class);
+                    intent.putExtra("url", articles.get(position).getVideoUrl());
+                    intent.putExtra("pos", holder.videoView.getCurrentPosition());
+                    startActivity(intent);
+                }
+            }
+        });
+        holder.prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newPos = holder.videoView.getCurrentPosition() - 10;
+                holder.videoView.seekTo(newPos);
+            }
+        });
+        holder.next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newPos = holder.videoView.getCurrentPosition() + 10;
+                holder.videoView.seekTo(newPos);
+            }
+        });
         holder.imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, VideoActivity.class);
-                intent.putExtra("url",model.getUrl());
-                startActivity(intent);
+                if(articles.get(position).getVideoUrl().length() == 0 && !articles.get(position).isLoadingVid){
+                    articles.get(position).isLoadingVid = true;
+                    holder.videoView.bringToFront();
+                    holder.mediaControllerLayout.bringToFront();
+                    StartVideo(holder.videoView, model.getUrl(), position);
+                }
             }
         });
         Glide.with(this)
@@ -194,6 +241,26 @@ public class VideoFragment extends Fragment implements VideoAdapter.VideoAdapter
         holder.source.setText(model.getSource());
         holder.time.setText(Utils.DateFormat(model.getPublishedAt()));
         holder.author.setText("");
-        holder.published.setText( model.getPublishedAt());
+        holder.published.setText(model.getPublishedAt());
+    }
+
+    void StartVideo(final VideoView videoView, String url, final int pos) {
+        GetJsonAPI.setUrl(url).addHeader("Content-Type", "text/html;  charset=UTF-8").get(new ApiCall.AsyncApiCall() {
+            @Override
+            public void onSuccess(long resTime, String result) throws ParserConfigurationException {
+                org.jsoup.nodes.Document document = (org.jsoup.nodes.Document) Jsoup.parse(result);
+                org.jsoup.nodes.Element e = document.select("iframe#divVideo_2").first();
+                String videoPath = Utils.urlParams(e.attr("src"), "fileId");
+                videoView.setVideoPath(videoPath);
+                videoView.start();
+                articles.get(pos).setVideoUrl(videoPath);
+            }
+
+            @Override
+            public void onFail(int responeCode, String mess) {
+
+            }
+        });
+
     }
 }

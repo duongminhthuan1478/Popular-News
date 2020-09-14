@@ -2,6 +2,7 @@ package com.example.android.popularnews.Utils;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.text.Html;
 import android.util.Log;
 
@@ -13,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 
 public class Utils {
 
@@ -36,10 +38,10 @@ public class Utils {
     public static String DateToTimeFormat(String oldstringDate) {
         String isTime = null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss [X]".substring(0,"EEE, dd MMM yyyy HH:mm:ss [X]".length()));
             Date d = sdf.parse(oldstringDate.substring(0, oldstringDate.length()-5));
 
-            return  ""+ android.text.format.DateFormat.format(" hh:mm:ss a dd-MM-yyyy ", d);
+            return  ""+ android.text.format.DateFormat.format("EEE, dd MMM yyyy HH:mm:ss [X]", d);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -56,7 +58,7 @@ public class Utils {
     }
 
     public static String DateFormat(String Timeinput) {
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss [X]".substring(0,"EEE, dd MMM yyyy HH:mm:ss [X]".length()));
         Date currentTime = Calendar.getInstance().getTime();
         long now = currentTime.getTime();
         long input = now;
@@ -79,7 +81,7 @@ public class Utils {
                 return "yesterday";
             } else {
                 Date date = new Date(input);
-                return "since " + android.text.format.DateFormat.format(" hh:mm:ss a dd-MM-yyyy ", date);
+                return "since " + android.text.format.DateFormat.format("EEE, dd MMM yyyy HH:mm:ss [X]", date);
             }
         } else {
             long spantime = input - now, phut = 60000;
@@ -93,12 +95,19 @@ public class Utils {
                 return "tomorrow";
             } else {
                 Date date = new Date(input);
-                return "on " + android.text.format.DateFormat.format(" hh:mm:ss a dd-MM-yyyy ", date);
+                return "on " + android.text.format.DateFormat.format("EEE, dd MMM yyyy HH:mm:ss [X]", date);
             }
         }
 
     }
-
+    public static String urlParams(String url, String params){
+        Uri uri = Uri.parse(url);
+        String server = uri.getAuthority();
+        String path = uri.getPath();
+        String protocol = uri.getScheme();
+        Set<String> args = uri.getQueryParameterNames();
+        return uri.getQueryParameter(params);
+    }
     public static String getCountry() {
         Locale locale = Locale.getDefault();
         String country = String.valueOf(locale.getCountry());

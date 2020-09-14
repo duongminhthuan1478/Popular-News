@@ -1,7 +1,7 @@
 package com.example.android.popularnews.Fragment;
 
 import android.content.Context;
-import android.content.res.XmlResourceParser;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -31,14 +30,12 @@ import com.example.android.popularnews.Adapter.Holder.ArticleViewHolder;
 import com.example.android.popularnews.MainActivity;
 import com.example.android.popularnews.R;
 import com.example.android.popularnews.Utils.ApiCall;
-import com.example.android.popularnews.Utils.ConstantAPI;
+import com.example.android.popularnews.DetailArticleActivity;
 import com.example.android.popularnews.Utils.GetJsonAPI;
 import com.example.android.popularnews.Utils.Utils;
 
 import com.example.android.popularnews.Utils.XMLDOMParser;
 import com.example.android.popularnews.models.Article;
-import com.example.android.popularnews.models.News;
-import com.google.gson.Gson;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -51,7 +48,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdapterInterface {
     Context context;
@@ -117,11 +113,14 @@ public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdap
                             XMLDOMParser parser = new XMLDOMParser();
                             for (int i = 0; i < nList.getLength(); i++) {
                                 Element element = (Element) nList.item(i);
-                                String title = parser.getValue(element, "title");
-                                String description = element.getElementsByTagName("media:content").item(0).getAttributes().getNamedItem("url").getNodeValue();
-                                String url = parser.getValue(element, "link");
-                                String publishedAt = parser.getValue(element, "pubDate");
-                                articles.add(new Article("VN EXPRESS", title, description, url, publishedAt));
+                                String category = element.getElementsByTagName("category").item(0).getTextContent();
+                                String title = element.getElementsByTagName("title").item(0).getTextContent();
+                                String description = element.getElementsByTagName("description").item(0).getTextContent();
+                                String url = element.getElementsByTagName("link").item(0).getTextContent();
+                                String publishedAt = element.getElementsByTagName("pubDate").item(0).getTextContent();
+                                String img = element.getElementsByTagName("media:content").item(0).getAttributes().getNamedItem("url").getNodeValue();
+                                String content = element.getElementsByTagName("content:encoded").item(0).getTextContent();
+                                articles.add(new Article(category, title, description, url, publishedAt, img, content));
                             }
                             articleAdapter.notifyDataSetChanged();
                             Loading.setVisibility(View.INVISIBLE);
@@ -139,7 +138,16 @@ public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdap
 
 
     @Override
-    public void onArticleBind(final ArticleViewHolder holder, List<Article> Articles, int position) {
+    public void onArticleBind(final ArticleViewHolder holder, final List<Article> Articles, final int position) {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String content = Articles.get(position).getContent();
+                Intent intent = new Intent(getActivity(), DetailArticleActivity.class);
+                intent.putExtra("content", content);
+                startActivity(intent);
+            }
+        });
         Article model = articles.get(position);
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());
@@ -168,7 +176,7 @@ public class NewsFragment extends Fragment implements ArticleAdapter.ArticleAdap
         holder.title.setText(model.getTitle());
         holder.description.setText(model.getDescription());
         holder.source.setText(model.getSource());
-        holder.time.setText(Utils.DateFormat(model.getPublishedAt()));
+        holder.time.setText(model.getPublishedAt());
         holder.author.setText("");
         holder.published.setText( model.getPublishedAt());
     }

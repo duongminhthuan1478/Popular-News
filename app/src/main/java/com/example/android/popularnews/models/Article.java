@@ -30,6 +30,12 @@ public class Article {
     @Expose
     private String publishedAt;
 
+    private String Content = "";
+
+    private String videoUrl = "";
+
+    public boolean isLoadingVid = false;
+
     public String getSource() {
         return source;
     }
@@ -90,11 +96,32 @@ public class Article {
         this.publishedAt = publishedAt;
     }
 
-    public Article(String source, String title, String description, String url, String publishedAt) {
+    public String getContent() {
+        return Content;
+    }
+
+    public void setContent(String content) {
+        Content = content;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+
+
+    public Article(String source, String title, String description, String url, String publishedAt, String urlToImage, String Content) {
         this.source = source;
         this.title = title;
         this.description = description;
         this.url = url;
         this.publishedAt = publishedAt;
+        this.urlToImage = urlToImage;
+        this.Content = Content;
     }
+
 }
